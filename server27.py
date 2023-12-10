@@ -3,7 +3,7 @@ Author: Emma Harel
 Program name: server2.7
 Description: a server that has 7 functions - DIR, DELETE, COPY, EXECUTE, TAKE_SCREENSHOT, SEND_PHOTO, AND EXIT.
 the server sends a response based on the clients request. The response follows the protocol.
-Date: 18/11/23
+Date: 10/12/23
 """
 
 import socket

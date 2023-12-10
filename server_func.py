@@ -1,3 +1,10 @@
+"""
+Author: Emma Harel
+Program name: server_func
+Description: the functions needed for the server
+Date: 10/12/23
+"""
+
 import glob
 import os
 import shutil
