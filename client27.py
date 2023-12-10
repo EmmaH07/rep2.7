@@ -3,7 +3,6 @@ Author: Emma Harel
 Program name: client27
 Description: A client that requests 7 things from the server: DIR, DELETE, COPY, EXECUTE, TAKE_SCREENSHOT, SEND_PHOTO,
 AND EXIT. The client receives a message that follows the protocol.
-itself.
 Date: 10/12/23
 """
 
