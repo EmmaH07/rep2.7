@@ -12,6 +12,10 @@ SUC = b"Executed successfully"
 
 
 def dir_cmd(path):
+    """
+    :param path:
+    :return: a string of bytes that contains either the names of the files in directory or an error msg.
+    """
     files_path = path + r'\*.*'
     try:
         d_list = glob.glob(files_path)
@@ -24,9 +28,15 @@ def dir_cmd(path):
 
 
 def delete(file_path):
+    """
+    :param file_path:
+    :return: success msg if the function succeeded or an error msg if not.
+    """
     try:
         os.remove(file_path)
         return SUC
+    except OSError:
+        return ERR
     except FileNotFoundError:
         return ERR
     except RuntimeError:
@@ -34,6 +44,12 @@ def delete(file_path):
 
 
 def copy(file1, file2):
+    """
+
+    :param file1:
+    :param file2:
+    :return: success msg if the function succeeded or an error msg if not.
+    """
     try:
         shutil.copy(file1, file2)
         return SUC
@@ -58,6 +74,10 @@ def copy(file1, file2):
 
 
 def exe(path):
+    """
+    :param path:
+    :return: success msg if the function succeeded or an error msg if not.
+    """
     try:
         subprocess.call(path)
         return SUC
@@ -71,10 +91,14 @@ def exe(path):
 
 
 def take_screenshot():
+    """
+    :return: success msg if the function succeeded or an error msg if not.
+    """
     try:
         im = ImageGrab.grab()
         im.save("server_screenshot.jpg")
         return SUC
+
     except RuntimeError:
         return ERR
 
@@ -83,6 +107,9 @@ def take_screenshot():
 
 
 def send_screenshot():
+    """
+    :return: the image in bytes if the function succeeded or an error msg if not.
+    """
     try:
         with open('server_screenshot.jpg', 'rb') as img:
             return_value = base64.b64encode(img.read()).decode('utf-8')
@@ -98,6 +125,10 @@ def send_screenshot():
 
 
 def is_valid_req(request):
+    """
+    :param request:
+    :return: True if the request is valid and False if not.
+    """
     req_list = ["DIR", "DELETE", "COPY", "EXECUTE", "TAKE_SCREENSHOT", "SEND_PHOTO", "EXIT"]
     for item in req_list:
         if request == item:
@@ -108,21 +139,18 @@ def is_valid_req(request):
 def decode_image(base64_bytes):
     """
     Decode a base64-encoded image, save it to a file, and show it.
-
-    :param base64_bytes: The base64-encoded image data.
-    :type base64_bytes: bytes
-
+    :param base64_bytes:
     :return: None
     """
     try:
-        base64str = base64_bytes.decode()
+        base64_str = base64_bytes.decode()
         # Decode the base64 string back to image data
-        decoded_image = base64.b64decode(base64str)
+        dec_image = base64.b64decode(base64_str)
 
         # Create a PIL Image object from the decoded image data
-        image = Image.open(BytesIO(decoded_image))
-        image.save('output_image.jpg')
-        image.show()
+        im = Image.open(BytesIO(dec_image))
+        im.save('output_image.jpg')
+        im.show()
 
     except Exception as err:
         print(str(err))

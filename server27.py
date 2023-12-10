@@ -1,8 +1,8 @@
 """
 Author: Emma Harel
 Program name: server2.7
-Description: a server that has 4 functions - TIME, RAND, NAME, and EXIT. the server sends a response based on the
-clients request. The response contains the length of the message, a dollar sign($) and the message itself.
+Description: a server that has 7 functions - DIR, DELETE, COPY, EXECUTE, TAKE_SCREENSHOT, SEND_PHOTO, AND EXIT.
+the server sends a response based on the clients request. The response follows the protocol.
 Date: 18/11/23
 """
 
@@ -30,6 +30,7 @@ def main():
 
             try:
                 request = client_socket.recv(MAX_PACKET)
+                logging.debug("Server received: " + request.decode())
 
                 while not protocol27.all_msg_passed(request):
                     request += client_socket.recv(MAX_PACKET)
@@ -40,41 +41,48 @@ def main():
                         d = server_func.dir_cmd(protocol27.par1(request).decode())
                         d = protocol27.send_msg(d)
                         client_socket.send(d)
+                        logging.debug("Server sent: " + d.decode())
 
                     elif protocol27.func(request).decode() == "DELETE":
                         de = server_func.delete(protocol27.par1(request).decode())
                         de = protocol27.send_msg(de)
                         client_socket.send(de)
+                        logging.debug("Server sent: " + de.decode())
 
                     elif protocol27.func(request).decode() == "COPY":
                         c = server_func.copy(protocol27.par1(request).decode(), protocol27.par2(request).decode())
                         c = protocol27.send_msg(c)
                         client_socket.send(c)
+                        logging.debug("Server sent: " + c.decode())
 
                     elif protocol27.func(request).decode() == "EXECUTE":
                         exe = server_func.exe(protocol27.par1(request).decode())
                         exe = protocol27.send_msg(exe)
                         client_socket.send(exe)
+                        logging.debug("Server sent: " + exe.decode())
 
                     elif protocol27.func(request).decode() == "TAKE_SCREENSHOT":
                         scr = server_func.take_screenshot()
                         scr = protocol27.send_msg(scr)
-                        print(scr)
                         client_socket.send(scr)
+                        logging.debug("Server sent: " + scr.decode())
 
                     elif protocol27.func(request).decode() == "SEND_PHOTO":
                         send = server_func.send_screenshot()
                         send = protocol27.send_msg(send)
-                        print(send)
                         client_socket.send(send)
+                        logging.debug("Server sent: " + send.decode())
 
                     else:
                         send = protocol27.send_msg(b'Illegal request')
                         client_socket.send(send)
+                        logging.debug("Server sent: " + send.decode())
 
                     request = client_socket.recv(MAX_PACKET)
                     logging.debug("Server received: " + request.decode())
 
+                client_socket.send(protocol27.send_msg(b'EXIT'))
+                logging.debug("Server sent: " + protocol27.send_msg(b'EXIT').decode())
                 logging.debug("server disconnected from: " + client_address[0] + ":" + str(client_address[1]))
                 logging.debug("server is waiting for a new client")
 

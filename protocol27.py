@@ -1,10 +1,13 @@
 """
 Author: Emma Harel
-Program name: server2.7
-Description: a server that has 4 functions - TIME, RAND, NAME, and EXIT. the server sends a response based on the
-clients request. The response contains the length of the message, a dollar sign($) and the message itself.
-Date: 18/11/23
+Program name: protocol27
+Description: the protocol for the code.
+Date: 10/12/23
 """
+
+import logging
+
+logging.basicConfig(filename='protocol27.log', level=logging.DEBUG)
 
 
 def proto_msg0(b_request):
@@ -72,7 +75,7 @@ def par1(p_msg):
 def par2(p_msg):
     """
     :param p_msg:
-    :return: a msg containing the second part of the protocol msg.
+    :return: a msg containing the second parameter part of the protocol msg.
     """
     str_msg = p_msg.decode()
     msg_arr = str_msg.split('$')
@@ -91,12 +94,20 @@ def send_msg(b_msg):
 
 
 def get_msg(p_msg):
+    """
+    :param p_msg:
+    :return: separates the msg from the rest of the protocol.
+    """
     str_msg = p_msg.decode()
     msg_arr = str_msg.split('$')
     return bytes(msg_arr[1], 'utf-8')
 
 
 def all_msg_passed(p_msg):
+    """
+    :param p_msg:
+    :return: checks if all the msg passed to client
+    """
     str_msg = p_msg.decode()
     msg_arr = str_msg.split('$')
     byte_msg = bytes(msg_arr[1], 'utf-8') + b'$' + bytes(msg_arr[2], 'utf-8') + b'$' + bytes(msg_arr[3], 'utf-8')
